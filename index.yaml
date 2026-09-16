@@ -6,6 +6,48 @@ entries:
       artifacthub.io/changes: |
         - kind: added
           description: Initial release bundling Controller, Router, Python/Bash runtime, WarmPools, NetworkPolicy, and Go client RBAC.
+        - kind: fixed
+          description: Fix Artifact Hub icon URL.
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: Upstream Docs
+          url: https://agent-sandbox.sigs.k8s.io
+        - name: Upstream Repository
+          url: https://github.com/kubernetes-sigs/agent-sandbox
+      artifacthub.io/prerelease: "false"
+    apiVersion: v2
+    appVersion: 1.0.2
+    created: "2026-09-16T05:39:55.084780114Z"
+    description: All-in-one Helm chart for Kubernetes Agent Sandbox with Controller,
+      Router, Python/Bash Runtime, WarmPools, and LLM Security Hardening.
+    digest: 9a3d516d96f4d16c115c8adba3385973083ae86282b19e936dbd4d90ac0beb60
+    home: https://agent-sandbox.sigs.k8s.io
+    icon: https://raw.githubusercontent.com/cncf/artwork/main/projects/kubernetes/icon/color/kubernetes-icon-color.svg
+    keywords:
+    - ai-agents
+    - agent-sandbox
+    - sandbox
+    - llm-security
+    - kubernetes-sigs
+    - python
+    - gvisor
+    kubeVersion: '>=1.26.0'
+    maintainers:
+    - name: Dovakiin0
+      url: https://github.com/Dovakiin0
+    name: agent-sandbox
+    sources:
+    - https://github.com/kubernetes-sigs/agent-sandbox
+    - https://github.com/Dovakiin0/agent-sandbox-helm
+    type: application
+    urls:
+    - https://github.com/Dovakiin0/agent-sandbox-helm/releases/download/agent-sandbox-1.0.1/agent-sandbox-1.0.1.tgz
+    version: 1.0.1
+  - annotations:
+      artifacthub.io/category: security
+      artifacthub.io/changes: |
+        - kind: added
+          description: Initial release bundling Controller, Router, Python/Bash runtime, WarmPools, NetworkPolicy, and Go client RBAC.
       artifacthub.io/license: Apache-2.0
       artifacthub.io/links: |
         - name: Upstream Docs
@@ -41,4 +83,4 @@ entries:
     urls:
     - https://github.com/Dovakiin0/agent-sandbox-helm/releases/download/agent-sandbox-1.0.0/agent-sandbox-1.0.0.tgz
     version: 1.0.0
-generated: "2026-09-16T05:20:39.767849273Z"
+generated: "2026-09-16T05:39:55.084788019Z"
