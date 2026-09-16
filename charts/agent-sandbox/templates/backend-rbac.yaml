@@ -46,8 +46,17 @@ rules:
   - update
   - watch
 - apiGroups:
+  - discovery.k8s.io
+  resources:
+  - endpointslices
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
   - ""
   resources:
+  - endpoints
   - pods
   - pods/portforward
   - services

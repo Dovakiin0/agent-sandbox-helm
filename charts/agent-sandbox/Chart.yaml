@@ -2,7 +2,7 @@ apiVersion: v2
 name: agent-sandbox
 description: All-in-one Helm chart for Kubernetes Agent Sandbox with Controller, Router, Python/Bash Runtime, WarmPools, and LLM Security Hardening.
 type: application
-version: 1.0.1
+version: 1.0.2
 appVersion: "1.0.2"
 kubeVersion: ">=1.26.0"
 home: https://agent-sandbox.sigs.k8s.io
@@ -35,3 +35,5 @@ annotations:
       description: Initial release bundling Controller, Router, Python/Bash runtime, WarmPools, NetworkPolicy, and Go client RBAC.
     - kind: fixed
       description: Fix Artifact Hub icon URL.
+    - kind: changed
+      description: Add discovery.k8s.io EndpointSlices and core Endpoints permissions to backend RBAC.
