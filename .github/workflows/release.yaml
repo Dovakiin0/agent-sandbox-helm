@@ -45,7 +45,7 @@ jobs:
           if [ -n "$(git status --porcelain README.md)" ]; then
             git add README.md
             git commit -m "docs: sync README.md to gh-pages"
-            git push origin gh-pages
+            git push origin HEAD:gh-pages
           fi
           cd ..
           git worktree remove ./gh-pages-worktree
