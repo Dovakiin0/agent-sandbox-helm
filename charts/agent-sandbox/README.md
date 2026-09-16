@@ -130,9 +130,8 @@ The following table lists the configurable parameters of the chart and their def
 | `networkPolicy.egress.allowPublicInternet` | Allow egress to internet (blocking metadata & RFC1918) | `true` |
 | `networkPolicy.egress.additionalEgress` | Custom additional egress rules | `[]` |
 | `backendRBAC.enabled` | Deploy RBAC for backend service managing sandboxes | `true` |
-| `backendRBAC.serviceAccount.name` | Backend ServiceAccount name | `agent-sandbox-backend` |
-| `backendRBAC.serviceAccount.namespace` | Backend ServiceAccount namespace | `claros-sandbox` |
-| `backendRBAC.additionalSubjects` | Additional service accounts to grant permissions | `[]` |
+| `backendRBAC.subjects` | List of subjects (ServiceAccounts) to grant RBAC permissions | `[{"name": "agent-sandbox-backend", "namespace": ""}]` |
+
 
 ---
 

@@ -284,9 +284,31 @@
           "type": "boolean",
           "description": "Enable RBAC Role and RoleBinding generation"
         },
+        "subjects": {
+          "type": "array",
+          "description": "List of subjects (ServiceAccounts, Users, Groups) granted permissions",
+          "items": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": ["ServiceAccount", "User", "Group"],
+                "description": "Subject kind (default: ServiceAccount)"
+              },
+              "name": {
+                "type": "string",
+                "description": "Subject name"
+              },
+              "namespace": {
+                "type": "string",
+                "description": "Subject namespace (default: release namespace)"
+              }
+            }
+          }
+        },
         "serviceAccount": {
           "type": "object",
-          "description": "Primary ServiceAccount to grant permissions to",
+          "description": "ServiceAccount configuration (legacy)",
           "properties": {
             "name": {
               "type": "string",
@@ -300,7 +322,7 @@
         },
         "additionalSubjects": {
           "type": "array",
-          "description": "Additional ServiceAccounts or Subjects to grant permissions across namespaces",
+          "description": "Additional subjects configuration (legacy)",
           "items": {
             "type": "object",
             "properties": {

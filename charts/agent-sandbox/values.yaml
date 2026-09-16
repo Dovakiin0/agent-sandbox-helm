@@ -68,7 +68,7 @@ sandboxTemplate:
 # Security hardening for untrusted LLM code execution
 security:
   # RuntimeClass for kernel/VM isolation (e.g., 'gvisor', 'kata-qemu', or 'kata-mshv-vm-isolation' on AKS)
-  # Leave empty ("") for local development (KinD / Minikube)
+  # Leave empty ("") for standard runc
   runtimeClassName: ""
   runAsUser: 1000
   runAsGroup: 1000
@@ -88,11 +88,12 @@ networkPolicy:
     allowPublicInternet: true
     additionalEgress: []
 
-# RBAC permissions for the Go backend service to create and manage Sandboxes & Claims
+# RBAC permissions for backend services to create and manage Sandboxes & Claims
 backendRBAC:
   enabled: true
-  serviceAccount:
-    name: agent-sandbox-backend
-    namespace: agent-sandbox
-  # Additional service accounts in other namespaces (e.g. your new sandbox service in business-apps)
-  additionalSubjects: []
+  # List of subjects (ServiceAccounts, Users, Groups) granted permissions to manage Sandboxes & Claims.
+  # Namespace defaults to the chart release namespace if left empty ("").
+  # Kind defaults to "ServiceAccount" if omitted.
+  subjects:
+    - name: agent-sandbox-backend
+      namespace: ""
