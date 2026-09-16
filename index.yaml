@@ -10,6 +10,52 @@ entries:
           description: Fix Artifact Hub icon URL.
         - kind: changed
           description: Add discovery.k8s.io EndpointSlices and core Endpoints permissions to backend RBAC.
+        - kind: added
+          description: Add JSON values schema (values.schema.json) for values validation and Artifact Hub schema viewer.
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: Upstream Docs
+          url: https://agent-sandbox.sigs.k8s.io
+        - name: Upstream Repository
+          url: https://github.com/kubernetes-sigs/agent-sandbox
+      artifacthub.io/prerelease: "false"
+    apiVersion: v2
+    appVersion: 1.0.2
+    created: "2026-09-16T09:11:49.485824543Z"
+    description: All-in-one Helm chart for Kubernetes Agent Sandbox with Controller,
+      Router, Python/Bash Runtime, WarmPools, and LLM Security Hardening.
+    digest: 14eb1cad8747dade5d1c0920ad9d2b282f52e9dcb63d48cb01d70dc216ebb090
+    home: https://agent-sandbox.sigs.k8s.io
+    icon: https://raw.githubusercontent.com/cncf/artwork/main/projects/kubernetes/icon/color/kubernetes-icon-color.svg
+    keywords:
+    - ai-agents
+    - agent-sandbox
+    - sandbox
+    - llm-security
+    - kubernetes-sigs
+    - python
+    - gvisor
+    kubeVersion: '>=1.26.0'
+    maintainers:
+    - name: Dovakiin0
+      url: https://github.com/Dovakiin0
+    name: agent-sandbox
+    sources:
+    - https://github.com/kubernetes-sigs/agent-sandbox
+    - https://github.com/Dovakiin0/agent-sandbox-helm
+    type: application
+    urls:
+    - https://github.com/Dovakiin0/agent-sandbox-helm/releases/download/agent-sandbox-1.0.3/agent-sandbox-1.0.3.tgz
+    version: 1.0.3
+  - annotations:
+      artifacthub.io/category: security
+      artifacthub.io/changes: |
+        - kind: added
+          description: Initial release bundling Controller, Router, Python/Bash runtime, WarmPools, NetworkPolicy, and Go client RBAC.
+        - kind: fixed
+          description: Fix Artifact Hub icon URL.
+        - kind: changed
+          description: Add discovery.k8s.io EndpointSlices and core Endpoints permissions to backend RBAC.
       artifacthub.io/license: Apache-2.0
       artifacthub.io/links: |
         - name: Upstream Docs
@@ -127,4 +173,4 @@ entries:
     urls:
     - https://github.com/Dovakiin0/agent-sandbox-helm/releases/download/agent-sandbox-1.0.0/agent-sandbox-1.0.0.tgz
     version: 1.0.0
-generated: "2026-09-16T07:40:25.731253121Z"
+generated: "2026-09-16T09:11:49.485847225Z"
