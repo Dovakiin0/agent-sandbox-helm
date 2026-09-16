@@ -1,0 +1,66 @@
+apiVersion: extensions.agents.x-k8s.io/v1beta1
+kind: SandboxTemplate
+metadata:
+  name: {{ .Values.sandboxTemplate.name | default "python-bash-template" }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/component: sandbox-template
+    {{- include "agent-sandbox.labels" . | nindent 4 }}
+spec:
+  podTemplate:
+    metadata:
+      labels:
+        app.kubernetes.io/component: sandbox-instance
+        agent-sandbox.sigs.k8s.io/sandboxed: "true"
+        template-name: {{ .Values.sandboxTemplate.name | default "python-bash-template" }}
+    spec:
+      {{- if .Values.security.runtimeClassName }}
+      runtimeClassName: {{ .Values.security.runtimeClassName | quote }}
+      {{- end }}
+      # Security: Do not mount the Kubernetes API token into untrusted agent sandboxes
+      automountServiceAccountToken: false
+      containers:
+      - name: sandbox
+        image: "{{ .Values.sandboxTemplate.image.repository }}:{{ .Values.sandboxTemplate.image.tag }}"
+        imagePullPolicy: {{ .Values.sandboxTemplate.image.pullPolicy | default "IfNotPresent" }}
+        ports:
+        - name: http
+          containerPort: 8888
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8888
+          initialDelaySeconds: 0
+          periodSeconds: 1
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8888
+          initialDelaySeconds: 2
+          periodSeconds: 10
+        resources:
+          {{- toYaml .Values.sandboxTemplate.resources | nindent 10 }}
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: {{ .Values.security.runAsUser | default 1000 }}
+          runAsGroup: {{ .Values.security.runAsGroup | default 1000 }}
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: {{ .Values.security.readOnlyRootFilesystem | default false }}
+          capabilities:
+            drop:
+            - ALL
+          seccompProfile:
+            type: RuntimeDefault
+      restartPolicy: "OnFailure"
+  {{- if .Values.sandboxTemplate.persistence.enabled }}
+  volumeClaimTemplatesPolicy: Overrides
+  volumeClaimTemplates:
+  - metadata:
+      name: workspace
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: {{ .Values.sandboxTemplate.persistence.size | default "1Gi" | quote }}
+  {{- end }}

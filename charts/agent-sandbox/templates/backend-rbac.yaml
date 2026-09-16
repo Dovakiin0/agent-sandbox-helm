@@ -1,0 +1,80 @@
+{{- if .Values.backendRBAC.enabled }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Values.backendRBAC.serviceAccount.name | default "agent-sandbox-backend" }}
+  namespace: {{ .Values.backendRBAC.serviceAccount.namespace | default .Release.Namespace }}
+  labels:
+    app.kubernetes.io/component: backend-client
+    {{- include "agent-sandbox.labels" . | nindent 4 }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "agent-sandbox.fullname" . }}-backend
+  labels:
+    app.kubernetes.io/component: backend-client
+    {{- include "agent-sandbox.labels" . | nindent 4 }}
+rules:
+- apiGroups:
+  - agents.x-k8s.io
+  resources:
+  - sandboxes
+  - sandboxes/status
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - extensions.agents.x-k8s.io
+  resources:
+  - sandboxclaims
+  - sandboxclaims/status
+  - sandboxtemplates
+  - sandboxwarmpools
+  - sandboxwarmpools/status
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  - pods/portforward
+  - services
+  verbs:
+  - create
+  - get
+  - list
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "agent-sandbox.fullname" . }}-backend
+  labels:
+    app.kubernetes.io/component: backend-client
+    {{- include "agent-sandbox.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ include "agent-sandbox.fullname" . }}-backend
+subjects:
+- kind: ServiceAccount
+  name: {{ .Values.backendRBAC.serviceAccount.name | default "agent-sandbox-backend" }}
+  namespace: {{ .Values.backendRBAC.serviceAccount.namespace | default .Release.Namespace }}
+{{- range .Values.backendRBAC.additionalSubjects }}
+- kind: ServiceAccount
+  name: {{ .name }}
+  namespace: {{ .namespace }}
+{{- end }}
+{{- end }}

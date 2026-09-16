@@ -1,0 +1,14 @@
+apiVersion: extensions.agents.x-k8s.io/v1beta1
+kind: SandboxWarmPool
+metadata:
+  name: {{ .Values.warmPool.name | default "python-bash-warmpool" }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/component: warmpool
+    {{- include "agent-sandbox.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.warmPool.replicas | default 2 }}
+  sandboxTemplateRef:
+    name: {{ .Values.sandboxTemplate.name | default "python-bash-template" }}
+  updateStrategy:
+    type: {{ .Values.warmPool.updateStrategy | default "OnReplenish" }}

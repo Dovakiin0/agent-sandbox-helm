@@ -1,0 +1,58 @@
+{{- if .Values.networkPolicy.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "agent-sandbox.fullname" . }}-sandbox-isolation
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/component: sandbox-security
+    {{- include "agent-sandbox.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      agent-sandbox.sigs.k8s.io/sandboxed: "true"
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  # Allow traffic only from the sandbox router on port 8888
+  - from:
+    - podSelector:
+        matchLabels:
+          app: sandbox-router
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/component: controller
+    ports:
+    - protocol: TCP
+      port: 8888
+  egress:
+  # Allow DNS resolution
+  - to:
+    - namespaceSelector: {}
+      podSelector:
+        matchLabels:
+          k8s-app: kube-dns
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+  {{- if .Values.networkPolicy.egress.allowPublicInternet }}
+  # Allow egress to public internet while explicitly blocking:
+  # 1. Cloud metadata service (169.254.169.254/32)
+  # 2. Internal private network subnets (RFC1918: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16)
+  - to:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+        except:
+        - 169.254.169.254/32
+        - 10.0.0.0/8
+        - 172.16.0.0/12
+        - 192.168.0.0/16
+        - 100.64.0.0/10
+  {{- end }}
+  {{- if .Values.networkPolicy.egress.additionalEgress }}
+  {{- toYaml .Values.networkPolicy.egress.additionalEgress | nindent 2 }}
+  {{- end }}
+{{- end }}

@@ -1,0 +1,95 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.router.service.name | default "sandbox-router-svc" }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/component: router
+    app: sandbox-router
+    {{- include "agent-sandbox.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.router.service.type | default "ClusterIP" }}
+  ports:
+  - name: http
+    protocol: TCP
+    port: {{ .Values.router.service.port | default 8080 }}
+    targetPort: 8080
+  selector:
+    app: sandbox-router
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "agent-sandbox.fullname" . }}-router
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/component: router
+    app: sandbox-router
+    {{- include "agent-sandbox.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.router.replicaCount | default 2 }}
+  selector:
+    matchLabels:
+      app: sandbox-router
+  template:
+    metadata:
+      labels:
+        app: sandbox-router
+        app.kubernetes.io/component: router
+        app.kubernetes.io/name: {{ include "agent-sandbox.name" . }}
+    spec:
+      {{- if .Values.router.topologySpreadConstraints.enabled }}
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfiable: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            app: sandbox-router
+      {{- end }}
+      containers:
+      - name: router
+        image: "{{ .Values.router.image.repository }}:{{ .Values.router.image.tag }}"
+        imagePullPolicy: {{ .Values.router.image.pullPolicy | default "IfNotPresent" }}
+        env:
+        - name: PROXY_TIMEOUT_SECONDS
+          value: {{ .Values.router.proxyTimeoutSeconds | default 180 | quote }}
+        - name: WEBSOCKET_IDLE_TIMEOUT_SECONDS
+          value: {{ .Values.router.websocketIdleTimeoutSeconds | default 3600 | quote }}
+        - name: WEBSOCKET_MAX_LIFETIME_SECONDS
+          value: {{ .Values.router.websocketMaxLifetimeSeconds | default 86400 | quote }}
+        - name: WEBSOCKET_MAX_MESSAGE_BYTES
+          value: {{ printf "%.0f" (float64 .Values.router.websocketMaxMessageBytes) | quote }}
+        - name: WEBSOCKET_MAX_CONNECTIONS_PER_CLIENT
+          value: {{ .Values.router.websocketMaxConnectionsPerClient | default 0 | quote }}
+        - name: ALLOW_UNAUTHENTICATED_ROUTER
+          value: {{ .Values.router.allowUnauthenticated | default "true" | quote }}
+        {{- if .Values.router.trustedProxyCIDRs }}
+        - name: TRUSTED_PROXY_CIDRS
+          value: {{ .Values.router.trustedProxyCIDRs | quote }}
+        {{- end }}
+        ports:
+        - containerPort: 8080
+          name: http
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        resources:
+          {{- toYaml .Values.router.resources | nindent 10 }}
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL

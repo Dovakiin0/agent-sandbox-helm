@@ -1,0 +1,98 @@
+# Default values for agent-sandbox chart.
+
+controller:
+  replicaCount: 1
+  image:
+    repository: registry.k8s.io/agent-sandbox/agent-sandbox-controller
+    tag: v1.0.2
+    pullPolicy: IfNotPresent
+  leaderElect: "true"
+  extensions:
+    enabled: true
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+router:
+  replicaCount: 2
+  image:
+    repository: us-central1-docker.pkg.dev/k8s-staging-images/agent-sandbox/sandbox-router
+    tag: latest-main
+    pullPolicy: IfNotPresent
+  service:
+    name: sandbox-router-svc
+    type: ClusterIP
+    port: 8080
+  proxyTimeoutSeconds: 180
+  websocketIdleTimeoutSeconds: 3600
+  websocketMaxLifetimeSeconds: 86400
+  websocketMaxMessageBytes: 16777216
+  websocketMaxConnectionsPerClient: 0
+  allowUnauthenticated: "true"
+  trustedProxyCIDRs: ""
+  topologySpreadConstraints:
+    enabled: true
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+
+# Sandbox Template configured for Python, bash, and sh execution
+sandboxTemplate:
+  name: python-bash-template
+  image:
+    # Official Agent Sandbox image with Python 3, bash, and sh + sandbox agent daemon on port 8888
+    repository: us-central1-docker.pkg.dev/k8s-staging-images/agent-sandbox/python-runtime-sandbox
+    tag: latest-main
+    pullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+      ephemeral-storage: 512Mi
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+      ephemeral-storage: 2Gi
+  persistence:
+    enabled: false
+    size: 1Gi
+
+# Security hardening for untrusted LLM code execution
+security:
+  # RuntimeClass for kernel/VM isolation (e.g., 'gvisor', 'kata-qemu', or 'kata-mshv-vm-isolation' on AKS)
+  # Leave empty ("") for local development (KinD / Minikube)
+  runtimeClassName: ""
+  runAsUser: 1000
+  runAsGroup: 1000
+  readOnlyRootFilesystem: false
+
+# Warm Pool configuration for low-latency sandbox acquisition
+warmPool:
+  name: python-bash-warmpool
+  replicas: 2
+  updateStrategy: OnReplenish
+
+# Network Policy for strict egress & ingress isolation
+networkPolicy:
+  enabled: true
+  egress:
+    # Allows agents to reach public internet (for pip, APIs) while blocking cloud metadata and internal RFC1918 subnets
+    allowPublicInternet: true
+    additionalEgress: []
+
+# RBAC permissions for the Go backend service to create and manage Sandboxes & Claims
+backendRBAC:
+  enabled: true
+  serviceAccount:
+    name: agent-sandbox-backend
+    namespace: claros-sandbox
+  # Additional service accounts in other namespaces (e.g. your new sandbox service in business-apps)
+  additionalSubjects: []
