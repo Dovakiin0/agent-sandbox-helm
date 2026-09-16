@@ -2,7 +2,7 @@
 
 [![Release Charts](https://github.com/Dovakiin0/agent-sandbox-helm/actions/workflows/release.yaml/badge.svg)](https://github.com/Dovakiin0/agent-sandbox-helm/actions/workflows/release.yaml)
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/dovakiin0)](https://artifacthub.io/packages/search?repo=dovakiin0)
-[![Latest Release](https://img.shields.io/github/v/release/Dovakiin0/agent-sandbox-helm?include_prereleases=false&sort=semver)](https://github.com/Dovakiin0/agent-sandbox-helm/releases)
+[![Latest Release](https://img.shields.io/github/v/release/Dovakiin0/agent-sandbox-helm)](https://github.com/Dovakiin0/agent-sandbox-helm/releases)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 Helm repository for **[Kubernetes Agent Sandbox](https://github.com/kubernetes-sigs/agent-sandbox)** (`sigs.k8s.io/agent-sandbox`).
@@ -15,7 +15,7 @@ This repository packages and maintains Helm charts to deploy and manage isolated
 
 | Chart | Version | Description | Artifact Hub |
 | --- | --- | --- | --- |
-| [`agent-sandbox`](charts/agent-sandbox) | [![Latest Release](https://img.shields.io/github/v/release/Dovakiin0/agent-sandbox-helm?include_prereleases=false&sort=semver&label=version)](https://github.com/Dovakiin0/agent-sandbox-helm/releases) | All-in-one chart bundling Controller, Router, Python/Bash runtime, WarmPools, NetworkPolicy, and RBAC | [View on Artifact Hub](https://artifacthub.io/packages/helm/dovakiin0-agent-sandbox/agent-sandbox) |
+| [`agent-sandbox`](charts/agent-sandbox) | [![Latest Release](https://img.shields.io/github/v/release/Dovakiin0/agent-sandbox-helm?label=version)](https://github.com/Dovakiin0/agent-sandbox-helm/releases) | All-in-one chart bundling Controller, Router, Python/Bash runtime, WarmPools, NetworkPolicy, and RBAC | [View on Artifact Hub](https://artifacthub.io/packages/helm/dovakiin0-agent-sandbox/agent-sandbox) |
 
 ---
 
