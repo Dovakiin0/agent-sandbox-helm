@@ -2,7 +2,7 @@ apiVersion: v2
 name: agent-sandbox
 description: All-in-one Helm chart for Kubernetes Agent Sandbox with Controller, Router, Python/Bash Runtime, WarmPools, and LLM Security Hardening.
 type: application
-version: 1.0.3
+version: 1.0.4
 appVersion: "1.0.2"
 kubeVersion: ">=1.26.0"
 home: https://agent-sandbox.sigs.k8s.io

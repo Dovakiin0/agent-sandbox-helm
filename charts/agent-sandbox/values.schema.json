@@ -38,8 +38,7 @@
               "enum": ["Always", "IfNotPresent", "Never"],
               "description": "Image pull policy"
             }
-          },
-          "required": ["repository", "tag"]
+          }
         },
         "leaderElect": {
           "type": ["string", "boolean"],
@@ -59,8 +58,7 @@
           "type": "object",
           "description": "Resource requests and limits for the controller"
         }
-      },
-      "required": ["replicaCount", "image"]
+      }
     },
     "router": {
       "type": "object",
@@ -88,8 +86,7 @@
               "enum": ["Always", "IfNotPresent", "Never"],
               "description": "Image pull policy"
             }
-          },
-          "required": ["repository", "tag"]
+          }
         },
         "service": {
           "type": "object",
@@ -110,8 +107,7 @@
               "maximum": 65535,
               "description": "Service port"
             }
-          },
-          "required": ["name", "type", "port"]
+          }
         },
         "proxyTimeoutSeconds": {
           "type": "integer",
@@ -160,8 +156,7 @@
           "type": "object",
           "description": "Resource requests and limits for the router"
         }
-      },
-      "required": ["replicaCount", "image", "service"]
+      }
     },
     "sandboxTemplate": {
       "type": "object",
@@ -188,8 +183,7 @@
               "enum": ["Always", "IfNotPresent", "Never"],
               "description": "Image pull policy"
             }
-          },
-          "required": ["repository", "tag"]
+          }
         },
         "resources": {
           "type": "object",
@@ -209,8 +203,7 @@
             }
           }
         }
-      },
-      "required": ["name", "image"]
+      }
     },
     "security": {
       "type": "object",
@@ -254,8 +247,7 @@
           "enum": ["OnReplenish", "Recreate"],
           "description": "Update strategy when warm pool template changes"
         }
-      },
-      "required": ["name", "replicas"]
+      }
     },
     "networkPolicy": {
       "type": "object",
@@ -304,8 +296,7 @@
               "type": "string",
               "description": "ServiceAccount namespace"
             }
-          },
-          "required": ["name"]
+          }
         },
         "additionalSubjects": {
           "type": "array",
@@ -326,8 +317,7 @@
                 "type": "string",
                 "description": "Subject namespace"
               }
-            },
-            "required": ["kind", "name"]
+            }
           }
         }
       }
