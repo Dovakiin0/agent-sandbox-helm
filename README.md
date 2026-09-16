@@ -14,7 +14,7 @@ This repository packages and maintains production-ready Helm charts to deploy an
 
 | Chart                                   | Version | Description                                                                                           | Artifact Hub                                                                                       |
 | --------------------------------------- | ------- | ----------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| [`agent-sandbox`](charts/agent-sandbox) | `1.0.0` | All-in-one chart bundling Controller, Router, Python/Bash runtime, WarmPools, NetworkPolicy, and RBAC | [View on Artifact Hub](https://artifacthub.io/packages/helm/dovakiin0-agent-sandbox/agent-sandbox) |
+| [`agent-sandbox`](charts/agent-sandbox) | `1.0.1` | All-in-one chart bundling Controller, Router, Python/Bash runtime, WarmPools, NetworkPolicy, and RBAC | [View on Artifact Hub](https://artifacthub.io/packages/helm/dovakiin0-agent-sandbox/agent-sandbox) |
 
 ---
 
