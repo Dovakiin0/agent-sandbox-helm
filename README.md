@@ -1,7 +1,7 @@
 # Agent Sandbox Helm Charts
 
 [![Release Charts](https://github.com/Dovakiin0/agent-sandbox-helm/actions/workflows/release.yaml/badge.svg)](https://github.com/Dovakiin0/agent-sandbox-helm/actions/workflows/release.yaml)
-[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/dovakiin0-agent-sandbox)](https://artifacthub.io/packages/helm/dovakiin0-agent-sandbox/agent-sandbox)
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/dovakiin0)](https://artifacthub.io/packages/search?repo=dovakiin0)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 Official Helm repository for **[Kubernetes Agent Sandbox](https://github.com/kubernetes-sigs/agent-sandbox)** (`sigs.k8s.io/agent-sandbox`).
@@ -12,8 +12,8 @@ This repository packages and maintains production-ready Helm charts to deploy an
 
 ## 📦 Charts Included
 
-| Chart | Version | Description | Artifact Hub |
-|---|---|---|---|
+| Chart                                   | Version | Description                                                                                           | Artifact Hub                                                                                       |
+| --------------------------------------- | ------- | ----------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
 | [`agent-sandbox`](charts/agent-sandbox) | `1.0.0` | All-in-one chart bundling Controller, Router, Python/Bash runtime, WarmPools, NetworkPolicy, and RBAC | [View on Artifact Hub](https://artifacthub.io/packages/helm/dovakiin0-agent-sandbox/agent-sandbox) |
 
 ---
