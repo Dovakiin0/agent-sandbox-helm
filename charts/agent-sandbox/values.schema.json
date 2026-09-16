@@ -1,0 +1,336 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Values",
+  "type": "object",
+  "description": "Values schema for agent-sandbox Helm chart",
+  "properties": {
+    "nameOverride": {
+      "type": "string",
+      "description": "Override the name of the chart"
+    },
+    "fullnameOverride": {
+      "type": "string",
+      "description": "Override the full name of the release"
+    },
+    "controller": {
+      "type": "object",
+      "description": "Agent Sandbox Controller deployment configuration",
+      "properties": {
+        "replicaCount": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Number of controller replicas"
+        },
+        "image": {
+          "type": "object",
+          "description": "Controller container image",
+          "properties": {
+            "repository": {
+              "type": "string",
+              "description": "Image repository"
+            },
+            "tag": {
+              "type": "string",
+              "description": "Image tag"
+            },
+            "pullPolicy": {
+              "type": "string",
+              "enum": ["Always", "IfNotPresent", "Never"],
+              "description": "Image pull policy"
+            }
+          },
+          "required": ["repository", "tag"]
+        },
+        "leaderElect": {
+          "type": ["string", "boolean"],
+          "description": "Enable leader election for high availability controller replicas"
+        },
+        "extensions": {
+          "type": "object",
+          "description": "Agent sandbox extensions controller support",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Enable sandbox extensions controller (templates and warmpools)"
+            }
+          }
+        },
+        "resources": {
+          "type": "object",
+          "description": "Resource requests and limits for the controller"
+        }
+      },
+      "required": ["replicaCount", "image"]
+    },
+    "router": {
+      "type": "object",
+      "description": "Sandbox Router deployment and service configuration",
+      "properties": {
+        "replicaCount": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Number of router replicas"
+        },
+        "image": {
+          "type": "object",
+          "description": "Router container image",
+          "properties": {
+            "repository": {
+              "type": "string",
+              "description": "Image repository"
+            },
+            "tag": {
+              "type": "string",
+              "description": "Image tag"
+            },
+            "pullPolicy": {
+              "type": "string",
+              "enum": ["Always", "IfNotPresent", "Never"],
+              "description": "Image pull policy"
+            }
+          },
+          "required": ["repository", "tag"]
+        },
+        "service": {
+          "type": "object",
+          "description": "Router Kubernetes Service configuration",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Service name"
+            },
+            "type": {
+              "type": "string",
+              "enum": ["ClusterIP", "NodePort", "LoadBalancer"],
+              "description": "Service type"
+            },
+            "port": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 65535,
+              "description": "Service port"
+            }
+          },
+          "required": ["name", "type", "port"]
+        },
+        "proxyTimeoutSeconds": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "HTTP reverse proxy timeout in seconds"
+        },
+        "websocketIdleTimeoutSeconds": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "WebSocket idle connection timeout in seconds"
+        },
+        "websocketMaxLifetimeSeconds": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum WebSocket lifetime in seconds"
+        },
+        "websocketMaxMessageBytes": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum WebSocket payload message size in bytes"
+        },
+        "websocketMaxConnectionsPerClient": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Max WebSocket connections allowed per client IP (0 for unlimited)"
+        },
+        "allowUnauthenticated": {
+          "type": ["string", "boolean"],
+          "description": "Allow direct unauthenticated traffic routing to sandboxes"
+        },
+        "trustedProxyCIDRs": {
+          "type": "string",
+          "description": "Comma-separated CIDR blocks trusted for X-Forwarded-For headers"
+        },
+        "topologySpreadConstraints": {
+          "type": "object",
+          "description": "Topology spread constraints for router HA across zones and nodes",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Enable topology spread constraints"
+            }
+          }
+        },
+        "resources": {
+          "type": "object",
+          "description": "Resource requests and limits for the router"
+        }
+      },
+      "required": ["replicaCount", "image", "service"]
+    },
+    "sandboxTemplate": {
+      "type": "object",
+      "description": "Default SandboxTemplate CR for Python/Bash execution",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "SandboxTemplate custom resource name"
+        },
+        "image": {
+          "type": "object",
+          "description": "Runtime sandbox container image",
+          "properties": {
+            "repository": {
+              "type": "string",
+              "description": "Image repository"
+            },
+            "tag": {
+              "type": "string",
+              "description": "Image tag"
+            },
+            "pullPolicy": {
+              "type": "string",
+              "enum": ["Always", "IfNotPresent", "Never"],
+              "description": "Image pull policy"
+            }
+          },
+          "required": ["repository", "tag"]
+        },
+        "resources": {
+          "type": "object",
+          "description": "Resource requests and limits for sandbox instances"
+        },
+        "persistence": {
+          "type": "object",
+          "description": "Persistent volume claim template for sandbox scratch/storage space",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Enable persistent scratch storage volume"
+            },
+            "size": {
+              "type": "string",
+              "description": "Requested storage size (e.g. 1Gi, 10Gi)"
+            }
+          }
+        }
+      },
+      "required": ["name", "image"]
+    },
+    "security": {
+      "type": "object",
+      "description": "Security hardening and sandbox runtime isolation settings",
+      "properties": {
+        "runtimeClassName": {
+          "type": "string",
+          "description": "RuntimeClass for kernel/VM isolation (e.g. 'gvisor', 'kata-qemu', 'kata-mshv-vm-isolation'). Leave empty for standard runc."
+        },
+        "runAsUser": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "UID to run sandbox container processes"
+        },
+        "runAsGroup": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "GID to run sandbox container processes"
+        },
+        "readOnlyRootFilesystem": {
+          "type": "boolean",
+          "description": "Mount container root filesystem as read-only"
+        }
+      }
+    },
+    "warmPool": {
+      "type": "object",
+      "description": "SandboxWarmPool CR configuration for low-latency pre-warmed instances",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "WarmPool custom resource name"
+        },
+        "replicas": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of pre-warmed idle sandboxes to maintain"
+        },
+        "updateStrategy": {
+          "type": "string",
+          "enum": ["OnReplenish", "Recreate"],
+          "description": "Update strategy when warm pool template changes"
+        }
+      },
+      "required": ["name", "replicas"]
+    },
+    "networkPolicy": {
+      "type": "object",
+      "description": "Kubernetes NetworkPolicy isolation for sandbox pods",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable NetworkPolicy creation"
+        },
+        "egress": {
+          "type": "object",
+          "description": "Egress rules for sandboxes",
+          "properties": {
+            "allowPublicInternet": {
+              "type": "boolean",
+              "description": "Allow outbound traffic to public internet while blocking private subnets (RFC1918) and cloud metadata endpoints"
+            },
+            "additionalEgress": {
+              "type": "array",
+              "description": "Additional custom Kubernetes NetworkPolicy egress rules",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "backendRBAC": {
+      "type": "object",
+      "description": "RBAC permissions for backend application services interacting with Agent Sandbox CRDs",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable RBAC Role and RoleBinding generation"
+        },
+        "serviceAccount": {
+          "type": "object",
+          "description": "Primary ServiceAccount to grant permissions to",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "ServiceAccount name"
+            },
+            "namespace": {
+              "type": "string",
+              "description": "ServiceAccount namespace"
+            }
+          },
+          "required": ["name"]
+        },
+        "additionalSubjects": {
+          "type": "array",
+          "description": "Additional ServiceAccounts or Subjects to grant permissions across namespaces",
+          "items": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": ["ServiceAccount", "User", "Group"],
+                "description": "Subject kind"
+              },
+              "name": {
+                "type": "string",
+                "description": "Subject name"
+              },
+              "namespace": {
+                "type": "string",
+                "description": "Subject namespace"
+              }
+            },
+            "required": ["kind", "name"]
+          }
+        }
+      }
+    }
+  }
+}

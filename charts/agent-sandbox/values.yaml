@@ -93,6 +93,6 @@ backendRBAC:
   enabled: true
   serviceAccount:
     name: agent-sandbox-backend
-    namespace: claros-sandbox
+    namespace: agent-sandbox
   # Additional service accounts in other namespaces (e.g. your new sandbox service in business-apps)
   additionalSubjects: []
