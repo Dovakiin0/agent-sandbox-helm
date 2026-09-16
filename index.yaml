@@ -62,7 +62,7 @@ entries:
       Router, Python/Bash Runtime, WarmPools, and LLM Security Hardening.
     digest: cc04ae0badb0d8c92652a8051f993c6ecf88b29f90130d0326e8dbdcac2fba41
     home: https://agent-sandbox.sigs.k8s.io
-    icon: https://raw.githubusercontent.com/cncf/artwork/main/other/kubernetes/icon/color/kubernetes-icon-color.svg
+    icon: https://raw.githubusercontent.com/cncf/artwork/main/projects/kubernetes/icon/color/kubernetes-icon-color.svg
     keywords:
     - ai-agents
     - agent-sandbox
