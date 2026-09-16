@@ -1,5 +1,5 @@
 # artifacthub-repo.yml
-repositoryID: "" # Artifact Hub will generate a UUID when the repository is added
+repositoryID: "89c250e0-0b09-4d4d-a613-321aa10bbac6" # Artifact Hub will generate a UUID when the repository is added
 owners:
   - name: Dovakiin0
     url: https://github.com/Dovakiin0
